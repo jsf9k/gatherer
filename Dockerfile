@@ -1,6 +1,8 @@
 ARG VERSION=unspecified
 
-FROM python:3.12.0-alpine
+# Official Docker images are in the form library/<app> while non-official
+# images are in the form <user>/<app>.
+FROM docker.io/library/python:3.12.0-alpine3.18
 
 ARG VERSION
 
