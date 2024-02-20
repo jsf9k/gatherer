@@ -79,12 +79,7 @@ WORKDIR ${CISA_HOME}
 # cache.  This results in a smaller final image, at the cost of
 # slightly longer install times.
 ###
-RUN wget --output-document sourcecode.tgz \
-    https://github.com/cisagov/skeleton-python-library/archive/v${VERSION}.tar.gz \
-    && tar --extract --gzip --file sourcecode.tgz --strip-components=1 \
-    && pip3 install --no-cache-dir --requirement requirements.txt \
-    && ln -snf /run/secrets/quote.txt src/example/data/secret.txt \
-    && rm sourcecode.tgz
+RUN pip3 install --no-cache-dir https://github.com/cisagov/skeleton-python-library/archive/v${VERSION}.tar.gz
 
 ###
 # Prepare to run
