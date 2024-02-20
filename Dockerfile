@@ -46,19 +46,6 @@ RUN addgroup --system --gid ${CISA_GID} ${CISA_GROUP} \
     && adduser --system --uid ${CISA_UID} --ingroup ${CISA_GROUP} ${CISA_USER}
 
 ###
-# Dependencies
-#
-# Note that we use apk --no-cache to avoid writing to a local cache.
-# This results in a smaller final image, at the cost of slightly
-# longer install times.
-###
-ENV DEPS \
-    ca-certificates \
-    openssl \
-    py-pip
-RUN apk --no-cache --quiet add ${DEPS}
-
-###
 # Make sure pip, setuptools, and wheel are the latest versions
 #
 # Note that we use pip3 --no-cache-dir to avoid writing to a local
