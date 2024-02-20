@@ -31,15 +31,6 @@ ENV CISA_GROUP=${CISA_USER}
 ENV CISA_HOME="/home/${CISA_USER}"
 
 ###
-# Upgrade the system
-#
-# Note that we use apk --no-cache to avoid writing to a local cache.
-# This results in a smaller final image, at the cost of slightly
-# longer install times.
-###
-RUN apk --update --no-cache --quiet upgrade
-
-###
 # Create unprivileged user
 ###
 RUN addgroup --system --gid ${CISA_GID} ${CISA_GROUP} \
