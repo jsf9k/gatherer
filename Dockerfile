@@ -53,8 +53,6 @@ RUN pip3 install --no-cache-dir --upgrade \
     setuptools==${PYTHON_SETUPTOOLS_VERSION} \
     wheel==${PYTHON_WHEEL_VERSION}
 
-WORKDIR ${CISA_HOME}
-
 ###
 # Install Python dependencies
 #
@@ -68,6 +66,7 @@ RUN pip3 install --no-cache-dir https://github.com/cisagov/skeleton-python-libra
 # Prepare to run
 ###
 ENV ECHO_MESSAGE="Hello World from Dockerfile"
+WORKDIR ${CISA_HOME}
 USER ${CISA_USER}:${CISA_GROUP}
 EXPOSE 8080/TCP
 VOLUME ["/var/log"]
