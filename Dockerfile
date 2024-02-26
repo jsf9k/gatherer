@@ -44,11 +44,11 @@ RUN addgroup --system --gid ${CISA_GID} ${CISA_GROUP} \
 ###
 # Make sure the specified versions of pip, setuptools, and wheel are installed
 #
-# Note that we use pip3 --no-cache-dir to avoid writing to a local
+# Note that we use the --no-cache-dir flag to avoid writing to a local
 # cache.  This results in a smaller final image, at the cost of
 # slightly longer install times.
 ###
-RUN pip3 install --no-cache-dir --upgrade \
+RUN python3 -m pip install --no-cache-dir --upgrade \
     pip==${PYTHON_PIP_VERSION} \
     setuptools==${PYTHON_SETUPTOOLS_VERSION} \
     wheel==${PYTHON_WHEEL_VERSION}
@@ -56,11 +56,11 @@ RUN pip3 install --no-cache-dir --upgrade \
 ###
 # Install Python dependencies
 #
-# Note that we use pip3 --no-cache-dir to avoid writing to a local
+# Note that we use the --no-cache-dir flag to avoid writing to a local
 # cache.  This results in a smaller final image, at the cost of
 # slightly longer install times.
 ###
-RUN pip3 install --no-cache-dir https://github.com/cisagov/skeleton-python-library/archive/v${VERSION}.tar.gz
+RUN python3 -m pip install --no-cache-dir https://github.com/cisagov/skeleton-python-library/archive/v${VERSION}.tar.gz
 
 ###
 # Prepare to run
