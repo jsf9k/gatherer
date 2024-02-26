@@ -30,14 +30,10 @@ ARG CISA_USER="cisa"
 ENV CISA_GROUP=${CISA_USER}
 ENV CISA_HOME="/home/${CISA_USER}"
 
-###
-# Upgrade the system
-#
-# Note that we use apk --no-cache to avoid writing to a local cache.
-# This results in a smaller final image, at the cost of slightly
-# longer install times.
-###
-RUN apk --update --no-cache --quiet upgrade
+# Versions of the Python packages installed directly
+ENV PYTHON_PIP_VERSION=24.0
+ENV PYTHON_SETUPTOOLS_VERSION=69.1.0
+ENV PYTHON_WHEEL_VERSION=0.42.0
 
 ###
 # Create unprivileged user
@@ -46,18 +42,16 @@ RUN addgroup --system --gid ${CISA_GID} ${CISA_GROUP} \
     && adduser --system --uid ${CISA_UID} --ingroup ${CISA_GROUP} ${CISA_USER}
 
 ###
-# Make sure pip, setuptools, and wheel are the latest versions
+# Make sure the specified versions of pip, setuptools, and wheel are installed
 #
 # Note that we use pip3 --no-cache-dir to avoid writing to a local
 # cache.  This results in a smaller final image, at the cost of
 # slightly longer install times.
 ###
 RUN pip3 install --no-cache-dir --upgrade \
-    pip \
-    setuptools \
-    wheel
-
-WORKDIR ${CISA_HOME}
+    pip==${PYTHON_PIP_VERSION} \
+    setuptools==${PYTHON_SETUPTOOLS_VERSION} \
+    wheel==${PYTHON_WHEEL_VERSION}
 
 ###
 # Install Python dependencies
@@ -72,6 +66,7 @@ RUN pip3 install --no-cache-dir https://github.com/cisagov/skeleton-python-libra
 # Prepare to run
 ###
 ENV ECHO_MESSAGE="Hello World from Dockerfile"
+WORKDIR ${CISA_HOME}
 USER ${CISA_USER}:${CISA_GROUP}
 EXPOSE 8080/TCP
 VOLUME ["/var/log"]
