@@ -65,9 +65,10 @@ RUN python3 -m venv ${VIRTUAL_ENV} \
 #
 # Note that we sym-link the Python binary in the venv to the system-wide Python so that
 # any calls to `python3` will use our virtual environment. We are using short flags
-# because the ln binary in Alpine Linux does not support long flags.
+# because the ln binary in Alpine Linux does not support long flags. The -f instructs
+# ln to remove the existing file and the -s instructs ln to create a symbolic link.
 ###
-RUN ln -sf "$(command -v python3)" "${VIRTUAL_ENV}"/bin/python3
+RUN ln -fs "$(command -v python3)" "${VIRTUAL_ENV}"/bin/python3
 ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
 
 ###
