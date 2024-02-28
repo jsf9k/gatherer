@@ -10,6 +10,7 @@ import pytest
 ENV_VAR = "ECHO_MESSAGE"
 ENV_VAR_VAL = "Hello World from docker compose!"
 READY_MESSAGE = "This is a debug message"
+DIVISION_MESSAGE = "8 / 2 == 4.000000"
 SECRET_QUOTE = "Three may keep a secret, if two of them are dead."  # nosec
 RELEASE_TAG = os.getenv("RELEASE_TAG")
 VERSION_FILE = "src/version.txt"
@@ -52,6 +53,7 @@ def test_output(dockerc, main_container):
     # make sure container exited if running test isolated
     dockerc.wait(main_container.id)
     log_output = main_container.logs()
+    assert DIVISION_MESSAGE in log_output, "Division message not found in log output."
     assert SECRET_QUOTE in log_output, "Secret not found in log output."
 
 

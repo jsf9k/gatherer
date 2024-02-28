@@ -108,4 +108,4 @@ USER ${CISA_USER}:${CISA_GROUP}
 EXPOSE 8080/TCP
 VOLUME ["/var/log"]
 ENTRYPOINT ["example"]
-CMD ["--log-level", "DEBUG"]
+CMD ["--log-level", "DEBUG", "8", "2"]
