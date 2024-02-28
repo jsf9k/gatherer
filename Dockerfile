@@ -16,14 +16,21 @@ ENV PYTHON_SETUPTOOLS_VERSION=69.1.0
 ENV PYTHON_WHEEL_VERSION=0.42.0
 
 ###
-# Install the specified version of pipenv; set up a Python virtual environment (venv);
-# and install the specified versions of pip, setuptools, and wheel into the venv.
+# Install the specified versions of pip, setuptools, and wheel into the system
+# Python environment; install the specified version of pipenv into the system Python
+# environment; set up a Python virtual environment (venv); and install the specified
+# versions of pip, setuptools, and wheel into the venv.
 #
 # Note that we use the --no-cache-dir flag to avoid writing to a local
 # cache.  This results in a smaller final image, at the cost of
 # slightly longer install times.
 ###
-RUN python3 -m pip install --no-cache-dir --upgrade pipenv==${PYTHON_PIPENV_VERSION} \
+RUN python3 -m pip install --no-cache-dir --upgrade \
+        pip==${PYTHON_PIP_VERSION} \
+        setuptools==${PYTHON_SETUPTOOLS_VERSION} \
+        wheel==${PYTHON_WHEEL_VERSION} \
+    && python3 -m pip install --no-cache-dir --upgrade \
+        pipenv==${PYTHON_PIPENV_VERSION} \
     # Manueally create the virtual environment
     && python3 -m venv ${VIRTUAL_ENV} \
     # Ensure the core Python packages are installed in the virtual environment
