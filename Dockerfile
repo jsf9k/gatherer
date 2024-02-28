@@ -31,7 +31,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade \
         wheel==${PYTHON_WHEEL_VERSION} \
     && python3 -m pip install --no-cache-dir --upgrade \
         pipenv==${PYTHON_PIPENV_VERSION} \
-    # Manueally create the virtual environment
+    # Manually create the virtual environment
     && python3 -m venv ${VIRTUAL_ENV} \
     # Ensure the core Python packages are installed in the virtual environment
     && ${VIRTUAL_ENV}/bin/python3 -m pip install --no-cache-dir --upgrade \
