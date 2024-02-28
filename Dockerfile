@@ -1,6 +1,6 @@
 # Official Docker images are in the form library/<app> while non-official
 # images are in the form <user>/<app>.
-FROM docker.io/library/python:3.12.0-alpine3.18 as compile-stage
+FROM docker.io/library/python:3.12.2-alpine3.18 as compile-stage
 
 ###
 # Unprivileged user variables
@@ -53,7 +53,7 @@ RUN pipenv check --verbose \
 
 # Official Docker images are in the form library/<app> while non-official
 # images are in the form <user>/<app>.
-FROM docker.io/library/python:3.12.0-alpine3.18 as build-stage
+FROM docker.io/library/python:3.12.2-alpine3.18 as build-stage
 
 ###
 # For a list of pre-defined annotation keys and value types see:
