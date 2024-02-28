@@ -44,9 +44,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade \
 # the virtual environment.
 #
 # Note that pipenv will install into a virtual environment if the VIRTUAL_ENV
-# environment variable is set. We are using short flags because the rm binary
-# in Alpine Linux does not support long flags. The -f instructs rm to remove
-# files without prompting.
+# environment variable is set.
 ###
 WORKDIR /tmp
 COPY src/Pipfile src/Pipfile.lock ./
