@@ -1,29 +1,11 @@
 # Official Docker images are in the form library/<app> while non-official
 # images are in the form <user>/<app>.
-FROM docker.io/library/python:3.12.0-alpine3.18
+FROM docker.io/library/python:3.12.0-alpine3.18 as compile-stage
 
 ###
-# For a list of pre-defined annotation keys and value types see:
-# https://github.com/opencontainers/image-spec/blob/master/annotations.md
-#
-# Note: Additional labels are added by the build workflow.
+# Unprivileged user variables
 ###
-# github@cisa.dhs.gov is a very generic email distribution, and it is
-# unlikely that anyone on that distribution is familiar with the
-# particulars of your repository.  It is therefore *strongly*
-# suggested that you use an email address here that is specific to the
-# person or group that maintains this repository; for example:
-# LABEL org.opencontainers.image.authors="vm-fusion-dev-group@trio.dhs.gov"
-LABEL org.opencontainers.image.authors="github@cisa.dhs.gov"
-LABEL org.opencontainers.image.vendor="Cybersecurity and Infrastructure Security Agency"
-
-###
-# Unprivileged user setup variables
-###
-ARG CISA_UID=421
-ARG CISA_GID=${CISA_UID}
 ARG CISA_USER="cisa"
-ENV CISA_GROUP=${CISA_USER}
 ENV CISA_HOME="/home/${CISA_USER}"
 ENV VIRTUAL_ENV="${CISA_HOME}/.venv"
 
@@ -32,12 +14,6 @@ ENV PYTHON_PIP_VERSION=24.0
 ENV PYTHON_PIPENV_VERSION=2023.12.1
 ENV PYTHON_SETUPTOOLS_VERSION=69.1.0
 ENV PYTHON_WHEEL_VERSION=0.42.0
-
-###
-# Create unprivileged user
-###
-RUN addgroup --system --gid ${CISA_GID} ${CISA_GROUP} \
-    && adduser --system --uid ${CISA_UID} --ingroup ${CISA_GROUP} ${CISA_USER}
 
 ###
 # Install the specified version of pipenv; set up a Python virtual environment (venv);
@@ -68,18 +44,53 @@ RUN python3 -m pip install --no-cache-dir --upgrade pipenv==${PYTHON_PIPENV_VERS
 WORKDIR /tmp
 COPY src/Pipfile src/Pipfile.lock ./
 RUN pipenv check --verbose \
-    && pipenv install --clear --deploy --extra-pip-args "--no-cache-dir" --verbose \
-    && rm -f Pipfile*
+    && pipenv install --clear --deploy --extra-pip-args "--no-cache-dir" --verbose
+
+# Official Docker images are in the form library/<app> while non-official
+# images are in the form <user>/<app>.
+FROM docker.io/library/python:3.12.0-alpine3.18 as build-stage
 
 ###
-# Sym-link the Python binary in the venv to the system-wide Python and add the venv to
-# the PATH.
+# For a list of pre-defined annotation keys and value types see:
+# https://github.com/opencontainers/image-spec/blob/master/annotations.md
+#
+# Note: Additional labels are added by the build workflow.
+###
+# github@cisa.dhs.gov is a very generic email distribution, and it is
+# unlikely that anyone on that distribution is familiar with the
+# particulars of your repository.  It is therefore *strongly*
+# suggested that you use an email address here that is specific to the
+# person or group that maintains this repository; for example:
+# LABEL org.opencontainers.image.authors="vm-fusion-dev-group@trio.dhs.gov"
+LABEL org.opencontainers.image.authors="github@cisa.dhs.gov"
+LABEL org.opencontainers.image.vendor="Cybersecurity and Infrastructure Security Agency"
+
+###
+# Unprivileged user setup variables
+###
+ARG CISA_UID=421
+ARG CISA_GID=${CISA_UID}
+ARG CISA_USER="cisa"
+ENV CISA_GROUP=${CISA_USER}
+ENV CISA_HOME="/home/${CISA_USER}"
+ENV VIRTUAL_ENV="${CISA_HOME}/.venv"
+
+###
+# Create unprivileged user
+###
+RUN addgroup --system --gid ${CISA_GID} ${CISA_GROUP} \
+    && adduser --system --uid ${CISA_UID} --ingroup ${CISA_GROUP} ${CISA_USER}
+
+###
+# Copy in the Python virtual environment created in compile-stage, Sym-link the
+# Python binary in the venv to the system-wide Python and add the venv to the PATH.
 #
 # Note that we sym-link the Python binary in the venv to the system-wide Python so that
 # any calls to `python3` will use our virtual environment. We are using short flags
 # because the ln binary in Alpine Linux does not support long flags. The -f instructs
 # ln to remove the existing file and the -s instructs ln to create a symbolic link.
 ###
+COPY --from=compile-stage --chown=${CISA_USER}:${CISA_GROUP} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 RUN ln -fs "$(command -v python3)" "${VIRTUAL_ENV}"/bin/python3
 ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
 
