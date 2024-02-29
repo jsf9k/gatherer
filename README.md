@@ -139,9 +139,9 @@ containerize.  It is recommended that most users use a version tag (e.g.
 
 | Image:tag | Description |
 |-----------|-------------|
-|`cisagov/example:1.2.3`| An exact release version. |
-|`cisagov/example:1.2`| The most recent release matching the major and minor version numbers. |
-|`cisagov/example:1`| The most recent release matching the major version number. |
+|`cisagov/example:0.0.1`| An exact release version. |
+|`cisagov/example:0.0`| The most recent release matching the major and minor version numbers. |
+|`cisagov/example:0`| The most recent release matching the major version number. |
 |`cisagov/example:edge` | The most recent image built from a merge into the `develop` branch of this repository. |
 |`cisagov/example:nightly` | A nightly build of the `develop` branch of this repository. |
 |`cisagov/example:latest`| The most recent release image pushed to a container registry.  Pulling an image using the `:latest` tag [should be avoided.](https://vsupalov.com/docker-latest-tag/) |
