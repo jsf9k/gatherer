@@ -1,6 +1,6 @@
 # Official Docker images are in the form library/<app> while non-official
 # images are in the form <user>/<app>.
-FROM docker.io/library/python:3.12.0-alpine3.18 as compile-stage
+FROM docker.io/library/python:3.12.2-alpine3.19 as compile-stage
 
 ###
 # Unprivileged user variables
@@ -12,7 +12,7 @@ ENV VIRTUAL_ENV="${CISA_HOME}/.venv"
 # Versions of the Python packages installed directly
 ENV PYTHON_PIP_VERSION=24.0
 ENV PYTHON_PIPENV_VERSION=2023.12.1
-ENV PYTHON_SETUPTOOLS_VERSION=69.1.0
+ENV PYTHON_SETUPTOOLS_VERSION=69.1.1
 ENV PYTHON_WHEEL_VERSION=0.42.0
 
 ###
@@ -53,7 +53,7 @@ RUN pipenv check --verbose \
 
 # Official Docker images are in the form library/<app> while non-official
 # images are in the form <user>/<app>.
-FROM docker.io/library/python:3.12.0-alpine3.18 as build-stage
+FROM docker.io/library/python:3.12.2-alpine3.19 as build-stage
 
 ###
 # For a list of pre-defined annotation keys and value types see:
@@ -108,4 +108,4 @@ USER ${CISA_USER}:${CISA_GROUP}
 EXPOSE 8080/TCP
 VOLUME ["/var/log"]
 ENTRYPOINT ["example"]
-CMD ["--log-level", "DEBUG"]
+CMD ["--log-level", "DEBUG", "8", "2"]

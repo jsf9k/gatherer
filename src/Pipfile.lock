@@ -1,11 +1,11 @@
 {
   "_meta": {
     "hash": {
-      "sha256": "654452851fea1eb2c8811649e5efe8873c8ff51f5c14dd27a4a8ebb5b15a27c4"
+      "sha256": "ad65a437d348bca066601e0d05a14c0ee23e38b59d8d8e71558cb17c57259f6b"
     },
     "pipfile-spec": 6,
     "requires": {
-      "python_full_version": "3.12.0"
+      "python_full_version": "3.12.2"
     },
     "sources": [
       {
@@ -16,6 +16,14 @@
     ]
   },
   "default": {
+    "contextlib2": {
+      "hashes": [
+        "sha256:3fbdb64466afd23abaf6c977627b75b6139a5a3e8ce38405c5b413aed7a0471f",
+        "sha256:ab1e2bfe1d01d968e1b7e8d9023bc51ef3509bba217bb730cee3827e1ee82869"
+      ],
+      "markers": "python_version >= '3.6'",
+      "version": "==21.6.0"
+    },
     "docopt": {
       "hashes": [
         "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"
@@ -23,7 +31,14 @@
       "version": "==0.6.2"
     },
     "example": {
-      "file": "https://github.com/cisagov/skeleton-python-library/archive/v0.0.1.tar.gz"
+      "file": "https://github.com/cisagov/skeleton-python-library/archive/v0.2.0.tar.gz"
+    },
+    "schema": {
+      "hashes": [
+        "sha256:f06717112c61895cabc4707752b88716e8420a8819d71404501e114f91043197",
+        "sha256:f3ffdeeada09ec34bf40d7d79996d9f7175db93b7a5065de0faa7f41083c1e6c"
+      ],
+      "version": "==0.7.5"
     },
     "setuptools": {
       "hashes": [
