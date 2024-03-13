@@ -87,10 +87,10 @@ RUN addgroup --system --gid ${CISA_GID} ${CISA_GROUP} \
     && adduser --system --uid ${CISA_UID} --ingroup ${CISA_GROUP} ${CISA_USER}
 
 ###
-# Copy in the Python virtual environment created in compile-stage, Sym-link the
+# Copy in the Python virtual environment created in compile-stage, symlink the
 # Python binary in the venv to the system-wide Python and add the venv to the PATH.
 #
-# Note that we sym-link the Python binary in the venv to the system-wide Python so that
+# Note that we symlink the Python binary in the venv to the system-wide Python so that
 # any calls to `python3` will use our virtual environment. We are using short flags
 # because the ln binary in Alpine Linux does not support long flags. The -f instructs
 # ln to remove the existing file and the -s instructs ln to create a symbolic link.
