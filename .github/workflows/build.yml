@@ -173,7 +173,7 @@ jobs:
     #   repometa:
     #     The json metadata describing this repository.
     #   source_version:
-    #     The source version as reported by the `bump_version.sh show` command.
+    #     The source version as reported by the `bump-version show` command.
     #   tags:
     #     A comma separated list of Docker tags to be applied to the images on
     #     Docker Hub.  The tags will vary depending on:
@@ -265,7 +265,7 @@ jobs:
             TAGS="${TAGS},ghcr.io/${i}"
           done
           echo "created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
-          echo "source_version=$(./bump_version.sh show)" >> $GITHUB_OUTPUT
+          echo "source_version=$(./bump-version show)" >> $GITHUB_OUTPUT
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
           echo tags=${TAGS}
       - name: Setup tmate debug session
