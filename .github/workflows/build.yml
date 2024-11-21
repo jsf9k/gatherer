@@ -5,28 +5,28 @@ on:
   merge_group:
     types:
       - checks_requested
+  pull_request:
   push:
     branches:
       - "**"
     tags:
       - "v*.*.*"
-  pull_request:
-  schedule:
-    - cron: "0 10 * * *"  # everyday at 10am
   repository_dispatch:
     # Respond to rebuild requests. See: https://github.com/cisagov/action-apb/
     types:
       - apb
+  schedule:
+    - cron: "0 10 * * *"  # everyday at 10am
   workflow_dispatch:
     inputs:
-      remote-shell:
-        description: "Debug with remote shell"
-        required: true
-        default: "false"
       image-tag:
+        default: "dispatch"
         description: "Tag to apply to pushed images"
         required: true
-        default: "dispatch"
+      remote-shell:
+        default: "false"
+        description: "Debug with remote shell"
+        required: true
 
 # Set a default shell for any run steps. The `-Eueo pipefail` sets errtrace,
 # nounset, errexit, and pipefail. The `-x` will print all commands as they are
@@ -324,8 +324,8 @@ jobs:
         env:
           BASE_CACHE_KEY: buildx-${{ runner.os }}-
         with:
-          path: ${{ env.BUILDX_CACHE_DIR }}
           key: ${{ env.BASE_CACHE_KEY }}${{ github.sha }}
+          path: ${{ env.BUILDX_CACHE_DIR }}
           restore-keys: |
             ${{ env.BASE_CACHE_KEY }}
       - name: Create dist directory
@@ -340,15 +340,6 @@ jobs:
           cache-to: type=local,dest=${{ env.BUILDX_CACHE_DIR }}
           context: .
           file: ./Dockerfile
-          outputs: type=docker,dest=dist/image.tar
-          # Uncomment the following option if you are building an image for use
-          # on Google Cloud Run or AWS Lambda. The current default image output
-          # is unable to run on either. Please see the following issue for more
-          # information: https://github.com/docker/buildx/issues/1533
-          # provenance: false
-          tags: ${{ env.IMAGE_NAME }}:latest  # not to be pushed
-          # For a list of pre-defined annotation keys and value types see:
-          # https://github.com/opencontainers/image-spec/blob/master/annotations.md
           labels: "\
             org.opencontainers.image.created=${{
               needs.prepare.outputs.created }}
@@ -372,6 +363,15 @@ jobs:
 
             org.opencontainers.image.version=${{
               needs.prepare.outputs.source_version }}"
+          outputs: type=docker,dest=dist/image.tar
+          # Uncomment the following option if you are building an image for use
+          # on Google Cloud Run or AWS Lambda. The current default image output
+          # is unable to run on either. Please see the following issue for more
+          # information: https://github.com/docker/buildx/issues/1533
+          # provenance: false
+          tags: ${{ env.IMAGE_NAME }}:latest  # not to be pushed
+          # For a list of pre-defined annotation keys and value types see:
+          # https://github.com/opencontainers/image-spec/blob/master/annotations.md
       - name: Compress image
         run: gzip dist/image.tar
       - name: Upload artifacts
@@ -406,10 +406,10 @@ jobs:
           BASE_CACHE_KEY: "${{ github.job }}-${{ runner.os }}-\
             py${{ steps.setup-python.outputs.python-version }}-"
         with:
-          path: ${{ env.PIP_CACHE_DIR }}
           key: "${{ env.BASE_CACHE_KEY }}\
             ${{ hashFiles('**/requirements-test.txt') }}-\
             ${{ hashFiles('**/requirements.txt') }}"
+          path: ${{ env.PIP_CACHE_DIR }}
           restore-keys: |
             ${{ env.BASE_CACHE_KEY }}
       - name: Install dependencies
@@ -458,14 +458,14 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
+          password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up QEMU
@@ -477,8 +477,8 @@ jobs:
         env:
           BASE_CACHE_KEY: buildx-${{ runner.os }}-
         with:
-          path: ${{ env.BUILDX_CACHE_DIR }}
           key: ${{ env.BASE_CACHE_KEY }}${{ github.sha }}
+          path: ${{ env.BUILDX_CACHE_DIR }}
           restore-keys: |
             ${{ env.BASE_CACHE_KEY }}
       - name: Create cross-platform support Dockerfile-x
@@ -493,16 +493,6 @@ jobs:
           cache-to: type=local,dest=${{ env.BUILDX_CACHE_DIR }}
           context: .
           file: ./Dockerfile-x
-          platforms: ${{ env.PLATFORMS }}
-          # Uncomment the following option if you are building an image for use
-          # on Google Cloud Run or AWS Lambda. The current default image output
-          # is unable to run on either. Please see the following issue for more
-          # information: https://github.com/docker/buildx/issues/1533
-          # provenance: false
-          push: true
-          tags: ${{ needs.prepare.outputs.tags }}
-          # For a list of pre-defined annotation keys and value types see:
-          # https://github.com/opencontainers/image-spec/blob/master/annotations.md
           labels: "\
             org.opencontainers.image.created=${{
               needs.prepare.outputs.created }}
@@ -526,6 +516,16 @@ jobs:
 
             org.opencontainers.image.version=${{
               needs.prepare.outputs.source_version }}"
+          platforms: ${{ env.PLATFORMS }}
+          # Uncomment the following option if you are building an image for use
+          # on Google Cloud Run or AWS Lambda. The current default image output
+          # is unable to run on either. Please see the following issue for more
+          # information: https://github.com/docker/buildx/issues/1533
+          # provenance: false
+          push: true
+          tags: ${{ needs.prepare.outputs.tags }}
+          # For a list of pre-defined annotation keys and value types see:
+          # https://github.com/opencontainers/image-spec/blob/master/annotations.md
       - name: Publish README.md to Docker Hub
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
