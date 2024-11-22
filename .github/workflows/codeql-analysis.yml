@@ -25,6 +25,8 @@ on:
 jobs:
   diagnostics:
     name: Run diagnostics
+    # This job does not need any permissions
+    permissions: {}
     runs-on: ubuntu-latest
     steps:
       # Note that a duplicate of this step must be added at the top of
@@ -52,6 +54,8 @@ jobs:
       - diagnostics
     runs-on: ubuntu-latest
     permissions:
+      # actions/checkout needs this to fetch code
+      contents: read
       # required for all workflows
       security-events: write
     strategy:
