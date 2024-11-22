@@ -407,6 +407,8 @@ jobs:
         uses: step-security/harden-runner@v2
         with:
           egress-policy: audit
+      - id: setup-env
+        uses: cisagov/setup-env-github-action@develop
       - uses: actions/checkout@v4
       - id: setup-python
         uses: actions/setup-python@v5
