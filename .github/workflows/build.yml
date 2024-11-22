@@ -241,6 +241,9 @@ jobs:
       repometa: ${{ steps.repo.outputs.result }}
       source_version: ${{ steps.prep.outputs.source_version }}
       tags: ${{ steps.prep.outputs.tags }}
+    permissions:
+      # actions/checkout needs this to fetch code
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: GitHubSecurityLab/actions-permissions/monitor@v1
@@ -310,6 +313,9 @@ jobs:
     needs:
       - diagnostics
       - prepare
+    permissions:
+      # actions/checkout needs this to fetch code
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: GitHubSecurityLab/actions-permissions/monitor@v1
@@ -396,6 +402,9 @@ jobs:
     needs:
       - diagnostics
       - build
+    permissions:
+      # actions/checkout needs this to fetch code
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: GitHubSecurityLab/actions-permissions/monitor@v1
@@ -458,9 +467,11 @@ jobs:
       - lint
       - prepare
       - test
-    # When Dependabot creates a PR it requires this permission in
-    # order to push Docker images to ghcr.io.
     permissions:
+      # actions/checkout needs this to fetch code
+      contents: read
+      # When Dependabot creates a PR it requires this permission in
+      # order to push Docker images to ghcr.io.
       packages: write
     runs-on: ubuntu-latest
     steps:
