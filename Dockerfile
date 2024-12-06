@@ -88,7 +88,7 @@ RUN addgroup --system --gid ${CISA_GID} ${CISA_GROUP} \
 
 ###
 # Copy in the Python virtual environment created in compile-stage, symlink the
-# Python binary in the venv to the system-wide Python and add the venv to the PATH.
+# Python binary in the venv to the system-wide Python, and add the venv to the PATH.
 #
 # Note that we symlink the Python binary in the venv to the system-wide Python so that
 # any calls to `python3` will use our virtual environment. We are using short flags
