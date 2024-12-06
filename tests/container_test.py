@@ -62,10 +62,8 @@ def test_output(dockerc, main_container):
 )
 def test_release_version():
     """Verify that release tag version agrees with the module version."""
-    pkg_vars = {}
     with open(VERSION_FILE) as f:
-        exec(f.read(), pkg_vars)  # nosec
-    project_version = pkg_vars["__version__"]
+        project_version = f.read().strip()
     assert (
         RELEASE_TAG == f"v{project_version}"
     ), "RELEASE_TAG does not match the project version"
@@ -76,10 +74,8 @@ def test_log_version(dockerc, version_container):
     # make sure container exited if running test isolated
     dockerc.wait(version_container.id)
     log_output = version_container.logs().strip()
-    pkg_vars = {}
     with open(VERSION_FILE) as f:
-        exec(f.read(), pkg_vars)  # nosec
-    project_version = pkg_vars["__version__"]
+        project_version = f.read().strip()
     assert (
         log_output == project_version
     ), f"Container version output to log does not match project version file {VERSION_FILE}"
@@ -87,10 +83,8 @@ def test_log_version(dockerc, version_container):
 
 def test_container_version_label_matches(version_container):
     """Verify the container version label is the correct version."""
-    pkg_vars = {}
     with open(VERSION_FILE) as f:
-        exec(f.read(), pkg_vars)  # nosec
-    project_version = pkg_vars["__version__"]
+        project_version = f.read().strip()
     assert (
         version_container.config.labels["org.opencontainers.image.version"]
         == project_version
