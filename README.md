@@ -24,7 +24,7 @@ appropriate for Docker containers and the major languages that we use.
 To run the `cisagov/example` image via Docker:
 
 ```console
-docker run cisagov/example:0.0.1
+docker run cisagov/example:0.2.0
 ```
 
 ### Running with Docker Compose ###
@@ -37,7 +37,7 @@ docker run cisagov/example:0.0.1
 
     services:
       example:
-        image: cisagov/example:0.0.1
+        image: cisagov/example:0.2.0
         volumes:
           - type: bind
             source: <your_log_dir>
@@ -82,7 +82,7 @@ environment variables.  See the
 
     services:
       example:
-        image: cisagov/example:0.0.1
+        image: cisagov/example:0.2.0
         volumes:
           - type: bind
             source: <your_log_dir>
@@ -125,23 +125,52 @@ environment variables.  See the
 1. Pull the new image:
 
     ```console
-    docker pull cisagov/example:0.0.1
+    docker pull cisagov/example:0.2.0
     ```
 
 1. Recreate and run the container by following the [previous instructions](#running-with-docker).
+
+## Updating Python dependencies ##
+
+This image uses [Pipenv] to manage Python dependencies using a [Pipfile](https://github.com/pypa/pipfile).
+Both updating dependencies and changing the [Pipenv] configuration in `src/Pipfile`
+will result in a modified `src/Pipfile.lock` file that should be committed to the
+repository.
+
+> [!WARNING]
+> The `src/Pipfile.lock` as generated will fail `pre-commit` checks due to JSON formatting.
+
+### Updating dependencies ###
+
+If you want to update existing dependencies you would run the following command
+in the `src/` subdirectory:
+
+```console
+pipenv lock
+```
+
+### Modifying dependencies ###
+
+If you want to add or remove dependencies you would update the `src/Pipfile` file
+and then update dependencies as you would above.
+
+> [!NOTE]
+> You should only specify packages that are explicitly needed for your Docker
+> configuration. Allow [Pipenv] to manage the dependencies of the specified
+> packages.
 
 ## Image tags ##
 
 The images of this container are tagged with [semantic
 versions](https://semver.org) of the underlying example project that they
 containerize.  It is recommended that most users use a version tag (e.g.
-`:0.0.1`).
+`:0.2.0`).
 
 | Image:tag | Description |
 |-----------|-------------|
-|`cisagov/example:1.2.3`| An exact release version. |
-|`cisagov/example:1.2`| The most recent release matching the major and minor version numbers. |
-|`cisagov/example:1`| The most recent release matching the major version number. |
+|`cisagov/example:0.2.0`| An exact release version. |
+|`cisagov/example:0.2`| The most recent release matching the major and minor version numbers. |
+|`cisagov/example:0`| The most recent release matching the major version number. |
 |`cisagov/example:edge` | The most recent image built from a merge into the `develop` branch of this repository. |
 |`cisagov/example:nightly` | A nightly build of the `develop` branch of this repository. |
 |`cisagov/example:latest`| The most recent release image pushed to a container registry.  Pulling an image using the `:latest` tag [should be avoided.](https://vsupalov.com/docker-latest-tag/) |
@@ -196,8 +225,7 @@ Build the image locally using this git repository as the [build context](https:/
 
 ```console
 docker build \
-  --build-arg VERSION=0.0.1 \
-  --tag cisagov/example:0.0.1 \
+  --tag cisagov/example:0.2.0 \
   https://github.com/cisagov/example.git#develop
 ```
 
@@ -227,9 +255,8 @@ Docker:
     docker buildx build \
       --file Dockerfile-x \
       --platform linux/amd64 \
-      --build-arg VERSION=0.0.1 \
       --output type=docker \
-      --tag cisagov/example:0.0.1 .
+      --tag cisagov/example:0.2.0 .
     ```
 
 ## New repositories from a skeleton ##
@@ -256,3 +283,5 @@ dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 All contributions to this project will be released under the CC0
 dedication. By submitting a pull request, you are agreeing to comply
 with this waiver of copyright interest.
+
+[Pipenv]: https://pypi.org/project/pipenv/
