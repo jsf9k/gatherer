@@ -10,6 +10,8 @@ from python_on_whales import docker
 MAIN_SERVICE_NAME = "example"
 VERSION_SERVICE_NAME = f"{MAIN_SERVICE_NAME}-version"
 
+VERSION_FILE = "src/version.txt"
+
 
 @pytest.fixture(scope="session")
 def dockerc():
@@ -34,6 +36,14 @@ def version_container(dockerc):
     """
     # find the container by name even if it is stopped already
     return dockerc.compose.ps(services=[VERSION_SERVICE_NAME], all=True)[0]
+
+
+@pytest.fixture(scope="session")
+def project_version():
+    """Return the version of the project."""
+    with open(VERSION_FILE) as f:
+        project_version = f.read().strip()
+    return project_version
 
 
 def pytest_addoption(parser):
