@@ -1,6 +1,6 @@
 # Official Docker images are in the form library/<app> while non-official
 # images are in the form <user>/<app>.
-FROM docker.io/library/python:3.12.2-alpine3.19 as compile-stage
+FROM docker.io/library/python:3.13.1-alpine3.20 as compile-stage
 
 ###
 # Unprivileged user variables
@@ -10,10 +10,10 @@ ENV CISA_HOME="/home/${CISA_USER}"
 ENV VIRTUAL_ENV="${CISA_HOME}/.venv"
 
 # Versions of the Python packages installed directly
-ENV PYTHON_PIP_VERSION=24.0
-ENV PYTHON_PIPENV_VERSION=2023.12.1
-ENV PYTHON_SETUPTOOLS_VERSION=69.1.1
-ENV PYTHON_WHEEL_VERSION=0.42.0
+ENV PYTHON_PIP_VERSION=24.3.1
+ENV PYTHON_PIPENV_VERSION=2024.4.0
+ENV PYTHON_SETUPTOOLS_VERSION=75.6.0
+ENV PYTHON_WHEEL_VERSION=0.45.1
 
 ###
 # Install the specified versions of pip, setuptools, and wheel into the system
@@ -53,7 +53,7 @@ RUN pipenv check --verbose \
 
 # Official Docker images are in the form library/<app> while non-official
 # images are in the form <user>/<app>.
-FROM docker.io/library/python:3.12.2-alpine3.19 as build-stage
+FROM docker.io/library/python:3.13.1-alpine3.20 as build-stage
 
 ###
 # For a list of pre-defined annotation keys and value types see:
