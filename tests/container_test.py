@@ -77,6 +77,9 @@ def test_log_version(dockerc, project_version, version_container):
     ), f"Container version output to log does not match project version file {VERSION_FILE}"
 
 
+@pytest.mark.skipif(
+    RELEASE_TAG in [None, ""], reason="this is not a release (RELEASE_TAG not set)"
+)
 def test_container_version_label_matches(project_version, version_container):
     """Verify the container version label is the correct version."""
     assert (

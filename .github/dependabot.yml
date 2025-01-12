@@ -29,10 +29,10 @@ updates:
       - dependency-name: step-security/harden-runner
       # Managed by cisagov/skeleton-docker
       # - dependency-name: actions/download-artifact
-      # - dependency-name: actions/github-script
       # - dependency-name: actions/upload-artifact
       # - dependency-name: docker/build-push-action
       # - dependency-name: docker/login-action
+      # - dependency-name: docker/metadata-action
       # - dependency-name: docker/setup-buildx-action
       # - dependency-name: docker/setup-qemu-action
       # - dependency-name: github/codeql-action
